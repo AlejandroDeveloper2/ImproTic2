@@ -74,3 +74,17 @@ db.projects.find({name: "Seguridad en redes sociales", phase: {$exists: false} }
    { upsert: true, returnNewDocument : true},
 );
 */
+//HU_009:Cuando requiera cambiar la fase de un proyecto de “En desarrollo” a “Terminado”
+Entonces podré  actualizar la fase del  proyecto.
+//Validar si  existe la fase del proyecto.
+db.projects.find({name: "Seguridad en redes sociales", phase: {$exists: false} });
+/*db.projects.findOneAndUpdate(
+   { name: "Seguridad en redes sociales" },
+   { 
+      $set: {        
+        phase:   "Terminado"
+      }
+   },
+   { upsert: true, returnNewDocument : true},
+);
+*/  
