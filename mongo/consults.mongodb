@@ -4,23 +4,35 @@ const database = 'ImproTicDB';
 use(database);
 
 // HU_001: cuando necesite registrarme en el sistema entonces podré ingresar los datos de registro (Incluyendo elegir el rol al que aspiro).
-/*
+
 // Validar que no se encuentre en la BD.
-db.users.count({documentId: 1230182630});
+//db.users.deleteOne({documentId: 1230182630});
+//db.users.count({documentId: 1230182630});
 
 // Insertar si no esta en la BD
-db.users.insertOne({
-    "email": "juanito@mail.co",
-    "documentId": Long('1230182630'),
-    "name": "Juan",
-    "lastName": "Bravo",
-    "fullName": "Juan Bravo",
-    "role": "student",
+/*db.users.insertOne({
+    "email": "pepi21@mail.co",
+    "documentId": Long('1630'),
+    "name": "Pepito",
+    "lastName": "Pito",
+    "fullName": "Pepito Pito",
+    "role": "admin",
     "status": "pending",
-    "password": "juan+bravo"
+    "password": "$2b$12$G2l7qgq/YwhkiANObn1P9.VapCuqNPIwHsgz6DBor7OQN5dD651W6"
+  });
+
+  db.users.insertOne({
+    "email": 'j@gmail.com',
+    "documentId": Long('29102'),
+    "name": 'a',
+    "lastName": 'p',
+    "fullName": 'a p',
+    "role": 'admin',
+    "status": 'pending',
+    "password": '$2b$12$G2l7qgq/YwhkiANObn1P9.VapCuqNPIwHsgz6DBor7OQN5dD651W6'
   });
 */
-
+//db.users.findOne({email: 'j@gmail.com'});
 // HU_002: Crear comandos para ejecutar en la base de datos MongoDB cuando necesite autenticarme en el sistema entonces podré ingresar mi correo y contraseña para ser validados.
 
 //Validar que el correo y la contraseña existan en la colección de “users”. Ejemplo:
@@ -32,8 +44,8 @@ db.users.insertOne({
 // HU_003: Crear comandos para ejecutar en la base de datos MongoDB cuando necesite actualizar la información personal entonces podré ingresar los datos que deseo actualizar.
 /*
 db.users.findOneAndUpdate(
-   { documentId : 1230182630 },
-   { $set: { name: "Juan", lastName: "Bravo", fullName: "Juan Bravo"} }, 
+   { documentId : 1020312418 },
+   { $set: { password: "$2b$12$SCOIym4yIyT2CCOKyDw34OHclBvnUFRvbyXsmgkNMjuqXUexLGdM2"} }, 
    { upsert: true, returnNewDocument : true},
 );
 */
@@ -61,10 +73,11 @@ db.users.findOneAndUpdate(
 // HU_007: Crear comandos para ejecutar en la base de datos MongoDB cuando requiera aprobar la creación de un proyecto entonces podré  actualizar el estado del  proyecto.
 
 //Validar si la existe la fase del proyecto.
-db.projects.find({name: "Seguridad en redes sociales", phase: {$exists: false} });
+//db.projects.findOne({name: "Seguridad en redes sociales", phase: {$exists: false} });
 
 //Actualizar el estado del proyecto, si la fase no existe se actualiza a iniciado y la fecha.
-/*db.projects.findOneAndUpdate(
+/*
+db.projects.findOneAndUpdate(
    { name: "Seguridad en redes sociales" },
    { $set: { 
         status: "active",
