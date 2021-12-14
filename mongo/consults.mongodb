@@ -44,8 +44,8 @@ use(database);
 // HU_003: Crear comandos para ejecutar en la base de datos MongoDB cuando necesite actualizar la información personal entonces podré ingresar los datos que deseo actualizar.
 /*
 db.users.findOneAndUpdate(
-   { documentId : 1020312418 },
-   { $set: { password: "$2b$12$SCOIym4yIyT2CCOKyDw34OHclBvnUFRvbyXsmgkNMjuqXUexLGdM2"} }, 
+   { documentId : 29102 },
+   { $set: { status: "pending", password: "$2b$12$SCOIym4yIyT2CCOKyDw34OHclBvnUFRvbyXsmgkNMjuqXUexLGdM2"} }, 
    { upsert: true, returnNewDocument : true},
 );
 */
@@ -58,10 +58,11 @@ db.users.findOneAndUpdate(
 /*
 //Listar los usuarios que aun no estan aceptados
 //db.users.find({status: "pending"});
-
+*/
 //Actualizar el estado del usuario
+/*
 db.users.findOneAndUpdate(
-   { documentId : 1230182630 },
+   { documentId : 1234567890 },
    { $set: { status: "authorized"} }, 
    { upsert: true, returnNewDocument : true},
 );
@@ -76,6 +77,7 @@ db.users.findOneAndUpdate(
 //db.projects.findOne({name: "Seguridad en redes sociales", phase: {$exists: false} });
 
 //Actualizar el estado del proyecto, si la fase no existe se actualiza a iniciado y la fecha.
+
 /*
 db.projects.findOneAndUpdate(
    { name: "Seguridad en redes sociales" },
