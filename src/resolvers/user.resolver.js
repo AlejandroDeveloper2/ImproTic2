@@ -1,6 +1,7 @@
 // vendors
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { AuthenticationError, ForbiddenError } from 'apollo-server';
 
 // constants
 import { USER_STATUS, ROLES } from '../constants/user.constants.js';
@@ -10,9 +11,9 @@ import Users from "../models/users.model.js";
 
 const allUsers = async (parent, args, { userSesion, errorMessage }) => {
   if (!userSesion) {
-    throw new Error(errorMessage);
+    throw new AuthenticationError(errorMessage);
   }else if(userSesion.role == ROLES.STUDENT) {
-    throw new Error('No access');
+    throw new ForbiddenError('No access');
   }
   return await Users.find();
 };
@@ -24,17 +25,17 @@ const user = async (parent, args, context) => {
 
 const userById = async (parent, args, { userSesion, errorMessage }, context) => {
   if (!userSesion) {
-    throw new Error(errorMessage);
+    throw new AuthenticationError(errorMessage);
   }else if(userSesion.role !== ROLES.ADMIN) {
-    throw new Error('No access');
+    throw new ForbiddenError('No access');
   }
   return await Users.findById(args._id);
 };
 const deleteUser = async (parent, args, context) => {
   /*if (!userSesion) {
-    throw new Error(errorMessage);
+    throw new AuthenticationError(errorMessage);
   }else if(userSesion._id != id._id) {
-    throw new Error('No access');
+    throw new ForbiddenError('No access');
   }*/
   const user = await Users.findById({ _id: args._id });
   return user.remove();
@@ -52,7 +53,7 @@ const registerUser = async (parent, args) => {
 
 const updateUser = async (parent, args, { userSesion, errorMessage }) => {
   if (!userSesion) {
-    throw new Error(errorMessage);
+    throw new AuthenticationError(errorMessage);
   }
   const id = await Users.findById(args._id);
   
@@ -63,9 +64,20 @@ const updateUser = async (parent, args, { userSesion, errorMessage }) => {
     delete args.input.role;
   }
 
-  if(args.input.password){
-     const pass = await bcrypt.hash(args.input.password, 12);
-     args.input.password = pass;
+  if(args.input.name && args.input.lastName){
+    if(args.input.name != id.name && args.input.lastName != id.lastName){
+      args.input.fullName = args.input.name+' '+args.input.lastName;
+    }
+  }
+
+  if(args.input.name){
+    if(args.input.name != id.name){
+      args.input.fullName = args.input.name+' '+id.lastName;
+    }
+  }else if(args.input.lastName){
+    if(args.input.lastName != id.lastName){
+      args.input.fullName = id.name+' '+args.input.lastName;
+    }
   }
 
   const user = await Users.findOneAndUpdate(
@@ -79,9 +91,9 @@ const updateUser = async (parent, args, { userSesion, errorMessage }) => {
 
 const userByEmail = async (parent, args, { userSesion, errorMessage }, context) => {
   if (!userSesion) {
-    throw new Error(errorMessage);
+    throw new AuthenticationError(errorMessage);
   }else if(userSesion.role !== ROLES.ADMIN) {
-    throw new Error('No access');
+    throw new ForbiddenError('No access');
   }
   const user = await Users.findOne({ email: args.email });
   return user;
@@ -91,18 +103,18 @@ const loginUser = async (parent, args) => {
   const user = await Users.findOne({ email: args.email });
   
   if (!user) {
-    throw new Error('Email/password not found or incorrect');
+    throw new ForbiddenError('Email/password not found or incorrect');
   }
 
   const { password, _id, email } = user;
   const isValid = await bcrypt.compare(args.password, password);
   
   if(!isValid){
-    throw new Error('Email/password not found or incorrect');
+    throw new ForbiddenError('Email/password not found or incorrect');
   }
   
   if(user.status !== USER_STATUS.AUTHORIZED){
-    throw new Error('Access denied');
+    throw new ForbiddenError('Access denied');
   }
 
   const token = await jwt.sign(

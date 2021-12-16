@@ -25,7 +25,7 @@ const enums = gql`
 const queries = gql`
   # Query all enrollments
   type Query {
-    allEnrollments: [Enrollment]
+    allEnrollments(project_id:ID): [Enrollment]
   }
 `;
 
@@ -44,6 +44,7 @@ const mutations = gql`
 const inputs = gql`
   input RegiInputEn {
     project_id: ID!
+    user_id: ID
   }
   input UpdateInputEn {
     status: EnrollmentStatus
